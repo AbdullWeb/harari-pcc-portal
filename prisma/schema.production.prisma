@@ -1,0 +1,170 @@
+// Production schema - PostgreSQL for Vercel/Neon deployment
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+}
+
+enum UserRole {
+  APPLICANT
+  REVIEWER
+  ADMIN
+}
+
+enum ApplicationStatus {
+  DRAFT
+  SUBMITTED
+  UNDER_REVIEW
+  APPROVED
+  REJECTED
+  CERTIFICATE_ISSUED
+}
+
+enum BusinessSector {
+  TRADE
+  MANUFACTURING
+  SERVICE
+  HOSPITALITY
+  AGRICULTURE
+  TECHNOLOGY
+  CONSTRUCTION
+  EDUCATION
+  HEALTHCARE
+  OTHER
+}
+
+enum DocumentType {
+  NATIONAL_ID
+  GRADE_8
+  GRADE_10_EGECE
+  GRADE_12_MATRIC
+  TVET_CERTIFICATE
+  DIPLOMA
+  ADVANCED_DIPLOMA
+  BACHELOR_DEGREE
+  MASTER_DEGREE
+  DOCTORAL_DEGREE
+  PROFESSIONAL_CERT
+  BUSINESS_PLAN
+  LEASE_AGREEMENT
+  PHOTO
+  OTHER
+}
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  password     String
+  role         UserRole @default(APPLICANT)
+  firstName    String
+  lastName     String
+  nationalId   String?  @unique
+  phone        String?
+  region       String?
+  woreda       String?
+  kebele       String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  applications Application[]
+  reviewedApps Application[] @relation("ReviewerApplications")
+  auditLogs    AuditLog[]
+  notifications Notification[]
+}
+
+model Application {
+  id                  String            @id @default(cuid())
+  userId              String
+  user                User              @relation(fields: [userId], references: [id])
+  status              ApplicationStatus @default(DRAFT)
+  referenceNumber     String?           @unique
+  firstName           String?
+  lastName            String?
+  email               String?
+  phone               String?
+  nationalId          String?
+  dateOfBirth         DateTime?
+  gender              String?
+  region              String?
+  woreda              String?
+  kebele              String?
+  houseNumber         String?
+  businessName        String?
+  businessSector      BusinessSector?
+  businessDescription String?
+  capitalAmount       Float?
+  employeeCount       Int?
+  assessmentScore     Int?
+  assessmentPassed    Boolean           @default(false)
+  assessmentAttempts  Int               @default(0)
+  reviewerId          String?
+  reviewer            User?             @relation("ReviewerApplications", fields: [reviewerId], references: [id])
+  reviewNotes         String?
+  reviewedAt          DateTime?
+  submittedAt         DateTime?
+  completedAt         DateTime?
+  createdAt           DateTime          @default(now())
+  updatedAt           DateTime          @updatedAt
+
+  documents   Document[]
+  certificate Certificate?
+  auditLogs   AuditLog[]
+}
+
+model Document {
+  id            String      @id @default(cuid())
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  type          DocumentType
+  fileName      String
+  fileUrl       String
+  fileSize      Int
+  mimeType      String
+  uploadedAt    DateTime    @default(now())
+}
+
+model Certificate {
+  id                String         @id @default(cuid())
+  applicationId     String         @unique
+  application       Application    @relation(fields: [applicationId], references: [id])
+  certificateNumber String         @unique
+  holderName        String
+  businessName      String
+  businessSector    BusinessSector
+  issuedAt          DateTime       @default(now())
+  expiresAt         DateTime?
+  isValid           Boolean        @default(true)
+}
+
+model AuditLog {
+  id            String       @id @default(cuid())
+  userId        String?
+  user          User?        @relation(fields: [userId], references: [id])
+  applicationId String?
+  application   Application? @relation(fields: [applicationId], references: [id])
+  action        String
+  details       String?
+  ipAddress     String?
+  userAgent     String?
+  createdAt     DateTime     @default(now())
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  title     String
+  message   String
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model SequenceCounter {
+  id       String @id @default("certificate_counter")
+  year     Int
+  sequence Int
+}
