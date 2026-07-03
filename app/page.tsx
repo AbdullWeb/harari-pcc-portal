@@ -41,7 +41,7 @@ export default function HomePage() {
           style={{background:'radial-gradient(circle, #243460, transparent)'}} />
 
         <div className="max-w-7xl mx-auto relative">
-          <div className="grid md:grid-cols-2 gap-12 items-center">
+          <div className="grid md:grid-cols-2 gap-8 md:gap-12 items-center">
           <div className="max-w-3xl">
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-semibold mb-6 glass"
               style={{color:'#e4c97a', border:'1px solid rgba(201,168,76,0.3)'}}>
@@ -49,7 +49,7 @@ export default function HomePage() {
               Official Digital Platform — Harari People Regional State, Ethiopia 🇪🇹
             </div>
 
-            <h1 className="text-5xl md:text-6xl font-bold text-white leading-tight mb-6">
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
               Professional
               <span className="block" style={{
                 background:'linear-gradient(135deg, #c9a84c, #e4c97a)',

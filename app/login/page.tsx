@@ -26,8 +26,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="min-h-screen flex" style={{background:'#0f1729'}}>
-      {/* Left panel */}
+    <div className="min-h-screen flex flex-col lg:flex-row" style={{background:'#0f1729'}}>
+      {/* Left panel - hidden on mobile */}
       <div className="hidden lg:flex flex-col justify-between w-1/2 p-14 harari-bg-dark relative overflow-hidden">
         <div className="absolute inset-0 opacity-20" style={{background:'radial-gradient(ellipse at 30% 50%, #c9a84c22, transparent 70%)'}} />
         <Link href="/" className="flex items-center gap-3 relative">
@@ -48,8 +48,8 @@ export default function LoginPage() {
         <p className="text-xs relative" style={{color:'rgba(255,255,255,0.3)'}}>© 2026 Harari People Regional State</p>
       </div>
 
-      {/* Right panel */}
-      <div className="flex-1 flex items-center justify-center p-8">
+      {/* Right panel - full width on mobile */}
+      <div className="flex-1 flex items-center justify-center p-5 sm:p-8">
         <div className="w-full max-w-md">
           {/* Mobile logo */}
           <div className="flex lg:hidden items-center gap-2 mb-8">

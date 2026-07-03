@@ -119,7 +119,7 @@ export default function ApplyPage() {
         </Link>
       </nav>
 
-      <div className="max-w-2xl mx-auto px-4 py-10">
+      <div className="max-w-2xl mx-auto px-4 py-8 md:py-10">
         {/* Step indicator */}
         <div className="flex items-center mb-10 relative">
           <div className="absolute left-0 right-0 top-5 h-px" style={{background:'rgba(255,255,255,0.08)'}} />

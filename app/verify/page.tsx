@@ -33,7 +33,7 @@ export default function VerifyPage() {
         <Link href="/" className="btn btn-ghost text-sm flex items-center gap-1" style={{color:'rgba(255,255,255,0.6)'}}><ArrowLeft className="w-4 h-4" /> Back</Link>
       </nav>
 
-      <div className="max-w-2xl mx-auto px-6 py-16">
+      <div className="max-w-2xl mx-auto px-4 md:px-6 py-10 md:py-16">
         {/* Header */}
         <div className="text-center mb-10">
           <div className="w-16 h-16 rounded-2xl grad-gold flex items-center justify-center mx-auto mb-4">

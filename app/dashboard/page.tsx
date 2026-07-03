@@ -65,18 +65,18 @@ export default function DashboardPage() {
       )}
 
       {/* Welcome */}
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
-          <h2 className="text-2xl font-bold" style={{color:'#0f1729'}}>{greeting}, {firstName} 👋</h2>
+          <h2 className="text-xl md:text-2xl font-bold" style={{color:'#0f1729'}}>{greeting}, {firstName} 👋</h2>
           <p className="text-sm mt-1" style={{color:'#64748b'}}>Here's an overview of your PCC applications</p>
         </div>
-        <Link href="/apply" className="btn btn-primary flex items-center gap-2">
+        <Link href="/apply" className="btn btn-primary flex items-center gap-2 self-start sm:self-auto">
           <FilePlus className="w-4 h-4" /> New Application
         </Link>
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
         {stats.map(s=>(
           <div key={s.label} className="card">
             <div className="w-12 h-12 rounded-xl mb-3 flex items-center justify-center" style={{background:s.bg}}>
@@ -88,7 +88,7 @@ export default function DashboardPage() {
       </div>
 
       {/* Quick actions */}
-      <div className="grid md:grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
         {[
           { href:'/apply',   icon:FilePlus,    label:'New Application',    desc:'Start a new PCC application',    color:'#c9a84c', bg:'rgba(201,168,76,0.1)' },
           { href:'/verify',  icon:ShieldCheck, label:'Verify Certificate', desc:'Check any certificate number',   color:'#10b981', bg:'rgba(16,185,129,0.1)' },
@@ -118,15 +118,16 @@ export default function DashboardPage() {
         </div>
 
         {apps.length === 0 ? (
-          <div className="text-center py-14">
-            <FileText className="w-14 h-14 mx-auto mb-3" style={{color:'#e2e8f0'}} />
+          <div className="text-center py-10">
+            <FileText className="w-12 h-12 mx-auto mb-3" style={{color:'#e2e8f0'}} />
             <h4 className="font-semibold mb-1" style={{color:'#64748b'}}>No applications yet</h4>
-            <p className="text-sm mb-6" style={{color:'#94a3b8'}}>Create your first PCC application to get started</p>
+            <p className="text-sm mb-4" style={{color:'#94a3b8'}}>Create your first PCC application to get started</p>
             <Link href="/apply" className="btn btn-primary">Create Application</Link>
           </div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="tbl">
+          <div className="overflow-x-auto -mx-4 md:mx-0">
+            <div className="min-w-[600px] px-4 md:px-0">
+            <table className="tbl w-full">
               <thead><tr><th>Reference</th><th>Business Name</th><th>Sector</th><th>Status</th><th>Submitted</th><th>Action</th></tr></thead>
               <tbody>
                 {apps.map(app=>(
@@ -145,6 +146,7 @@ export default function DashboardPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         )}
       </div>
