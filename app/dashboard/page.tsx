@@ -139,7 +139,9 @@ export default function DashboardPage() {
                     <td><span className="text-xs" style={{color:'#94a3b8'}}>{app.submittedAt ? new Date(app.submittedAt).toLocaleDateString() : '—'}</span></td>
                     <td>
                       {app.certificate
-                        ? <Link href="/verify" className="btn btn-outline text-xs py-1 px-3" style={{color:'#10b981', borderColor:'#10b981'}}>View Cert</Link>
+                        ? <Link href={`/certificate/${app.certificate.certificateNumber}`} className="btn btn-gold text-xs py-1 px-3 flex items-center gap-1 w-fit">
+                            <span>⬇</span> Download
+                          </Link>
                         : <Link href={`/applications/${app.id}`} className="btn btn-outline text-xs py-1 px-3">View</Link>}
                     </td>
                   </tr>

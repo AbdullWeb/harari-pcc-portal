@@ -141,10 +141,17 @@ export default function ApplicationDetailPage() {
                 <h3 className="font-bold text-white">Certificate Issued</h3>
               </div>
               <p className="font-mono text-sm mb-3" style={{color:'#e4c97a'}}>{app.certificate.certificateNumber}</p>
-              <p className="text-xs" style={{color:'rgba(255,255,255,0.5)'}}>
+              <p className="text-xs mb-4" style={{color:'rgba(255,255,255,0.5)'}}>
                 Issued: {new Date(app.certificate.issuedAt).toLocaleDateString()}
               </p>
-              <Link href="/verify" className="btn btn-gold w-full mt-4 text-sm">Verify Certificate</Link>
+              <div className="flex flex-col gap-2">
+                <Link href={`/certificate/${app.certificate.certificateNumber}`} className="btn btn-gold w-full text-sm text-center">
+                  ⬇ Download Certificate
+                </Link>
+                <Link href="/verify" className="btn btn-outline w-full text-sm text-center" style={{borderColor:'rgba(255,255,255,0.2)',color:'rgba(255,255,255,0.7)'}}>
+                  🔍 Verify Certificate
+                </Link>
+              </div>
             </div>
           )}
 

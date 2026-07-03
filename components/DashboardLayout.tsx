@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
-import { LayoutDashboard, FilePlus, ShieldCheck, User, LogOut, Bell, Menu, X } from 'lucide-react'
+import { LayoutDashboard, FilePlus, ShieldCheck, User, LogOut, Bell, Menu, X, Award } from 'lucide-react'
 
 interface Props {
   children: React.ReactNode
@@ -11,10 +11,11 @@ interface Props {
 }
 
 const applicantLinks = [
-  { href: '/dashboard', label: 'Dashboard',         icon: LayoutDashboard },
-  { href: '/apply',     label: 'New Application',   icon: FilePlus },
-  { href: '/verify',    label: 'Verify Certificate', icon: ShieldCheck },
-  { href: '/profile',   label: 'My Profile',         icon: User },
+  { href: '/dashboard',    label: 'Dashboard',         icon: LayoutDashboard },
+  { href: '/apply',        label: 'New Application',   icon: FilePlus },
+  { href: '/certificates', label: 'My Certificates',   icon: Award },
+  { href: '/verify',       label: 'Verify Certificate', icon: ShieldCheck },
+  { href: '/profile',      label: 'My Profile',         icon: User },
 ]
 const reviewerLinks = [
   { href: '/reviewer',  label: 'Review Queue',       icon: LayoutDashboard },

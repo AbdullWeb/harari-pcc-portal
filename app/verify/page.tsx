@@ -104,6 +104,12 @@ export default function VerifyPage() {
             <div className="px-6 py-3 text-center text-xs" style={{background:'rgba(201,168,76,0.08)', color:'rgba(255,255,255,0.4)'}}>
               Issued by: Harari Trade, Industry & Tourism Development Bureau
             </div>
+            <div className="px-6 py-4" style={{background:'#1a2540'}}>
+              <Link href={`/certificate/${result.certificate.certificateNumber}`}
+                className="btn btn-gold w-full text-sm flex items-center justify-center gap-2">
+                <span>⬇</span> Download Certificate PDF
+              </Link>
+            </div>
           </div>
         )}
 
