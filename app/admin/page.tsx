@@ -16,6 +16,8 @@ export default function AdminPage() {
   const [newUser,setNewUser] = useState({firstName:'',lastName:'',email:'',password:'',role:'APPLICANT',phone:''})
   const [saving,setSaving] = useState(false)
   const [formError,setFormError] = useState('')
+  const [deleteModal,setDeleteModal] = useState<any>(null)
+  const [deleting,setDeleting] = useState(false)
 
   useEffect(()=>{init()},[])
   useEffect(()=>{if(toast)setTimeout(()=>setToast(''),3000)},[toast])
@@ -30,6 +32,28 @@ export default function AdminPage() {
   }
   const loadStats = async () => setStats((await (await fetch('/api/admin/stats')).json()))
   const loadUsers = async () => setUsers((await (await fetch('/api/admin/users')).json()).users||[])
+
+  const deleteUser = async () => {
+    if (!deleteModal) return
+    setDeleting(true)
+    const res = await fetch(`/api/admin/users/${deleteModal.id}`, { method: 'DELETE' })
+    const data = await res.json()
+    setDeleting(false)
+    setDeleteModal(null)
+    if (!res.ok) { setToast(`❌ ${data.error}`); return }
+    setToast('✅ User deleted successfully')
+    loadUsers()
+  }
+
+  const changeRole = async (userId: string, newRole: string) => {
+    const res = await fetch(`/api/admin/users/${userId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ role: newRole })
+    })
+    if (res.ok) { setToast(`✅ Role updated to ${newRole}`); loadUsers() }
+    else { setToast('❌ Failed to update role') }
+  }
 
   const createUser = async () => {
     setFormError('')
@@ -174,18 +198,67 @@ export default function AdminPage() {
           <div className="overflow-x-auto -mx-4 md:mx-0">
             <div className="min-w-[500px] px-4 md:px-0">
               <table className="tbl w-full">
-                <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th></tr></thead>
+                <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Actions</th></tr></thead>
                 <tbody>
                   {users.map(u=>(
                     <tr key={u.id}>
                       <td><span className="font-medium text-sm" style={{color:'#0f1729'}}>{u.firstName} {u.lastName}</span></td>
                       <td><span className="text-xs" style={{color:'#64748b'}}>{u.email}</span></td>
-                      <td><span className={`badge ${roleColor[u.role]||'badge-draft'}`}>{u.role}</span></td>
+                      <td>
+                        <select
+                          value={u.role}
+                          onChange={e=>changeRole(u.id, e.target.value)}
+                          className="text-xs rounded-lg px-2 py-1 font-semibold border cursor-pointer"
+                          style={{background:'transparent', borderColor:'#e2e8f0', color:'#0f1729'}}>
+                          <option value="APPLICANT">APPLICANT</option>
+                          <option value="REVIEWER">REVIEWER</option>
+                          <option value="ADMIN">ADMIN</option>
+                        </select>
+                      </td>
                       <td><span className="text-xs" style={{color:'#94a3b8'}}>{new Date(u.createdAt).toLocaleDateString()}</span></td>
+                      <td>
+                        <button
+                          onClick={()=>setDeleteModal(u)}
+                          className="text-xs px-3 py-1.5 rounded-lg font-medium transition hover:opacity-90"
+                          style={{background:'rgba(239,68,68,0.1)', color:'#ef4444', border:'1px solid rgba(239,68,68,0.2)'}}>
+                          Delete
+                        </button>
+                      </td>
                     </tr>
                   ))}
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {deleteModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{background:'rgba(0,0,0,0.7)'}}>
+          <div className="w-full max-w-sm rounded-2xl overflow-hidden shadow-2xl" style={{background:'#1a2540',border:'1px solid rgba(239,68,68,0.3)'}}>
+            <div className="p-6 text-center">
+              <div className="w-14 h-14 rounded-full flex items-center justify-center mx-auto mb-4" style={{background:'rgba(239,68,68,0.15)'}}>
+                <X className="w-7 h-7" style={{color:'#ef4444'}}/>
+              </div>
+              <h3 className="font-bold text-white text-lg mb-2">Delete User?</h3>
+              <p className="text-sm mb-1" style={{color:'rgba(255,255,255,0.7)'}}>
+                <strong className="text-white">{deleteModal.firstName} {deleteModal.lastName}</strong>
+              </p>
+              <p className="text-xs mb-6" style={{color:'rgba(255,255,255,0.4)'}}>
+                {deleteModal.email} · {deleteModal.role}
+              </p>
+              <p className="text-xs mb-6 p-3 rounded-lg" style={{background:'rgba(239,68,68,0.1)',color:'#fca5a5',border:'1px solid rgba(239,68,68,0.2)'}}>
+                ⚠ This action cannot be undone. The user will lose all access immediately.
+              </p>
+              <div className="flex gap-3">
+                <button onClick={()=>setDeleteModal(null)} className="btn btn-outline flex-1" style={{borderColor:'rgba(255,255,255,0.15)',color:'rgba(255,255,255,0.6)'}}>
+                  Cancel
+                </button>
+                <button onClick={deleteUser} disabled={deleting} className="btn btn-danger flex-1">
+                  {deleting ? 'Deleting…' : 'Delete User'}
+                </button>
+              </div>
             </div>
           </div>
         </div>
