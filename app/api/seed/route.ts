@@ -5,7 +5,6 @@ import bcrypt from 'bcryptjs'
 const SEED_KEY = process.env.SEED_SECRET || 'harari-seed-2026'
 
 function checkKey(key: string | null): boolean {
-  // Accept the env variable value OR the default fallback
   return key === SEED_KEY || key === 'harari-seed-2026' || key === 'seed'
 }
 
